@@ -23,12 +23,9 @@ const menuItems = [
 
 export default function Sidebar({ children }: SidebarProps) {
   return (
-    <div className="flex flex-col-reverse md:flex-row h-screen">
+    <div className=" flex   flex-col-reverse md:flex-row h-screen">
       <div className="bg-[#171717]">
-        {/* Menu Bars Icon */}
-        <div className="hidden">
-          <FaBars />
-        </div>
+
         <div className="grid grid-flow-col md:grid-flow-row items-center">
           {menuItems.map((item,index) => (
             <NavLink to={item.path} key={index}>
@@ -46,7 +43,7 @@ export default function Sidebar({ children }: SidebarProps) {
           ))}
         </div>
       </div>
-      <main className="w-full h-full ">{children}</main>
+      <main className="w-full h-full overflow-scroll ">{children}</main>
     </div>
   );
 }

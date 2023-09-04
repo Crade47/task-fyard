@@ -9,16 +9,18 @@ const queryClient = new QueryClient();
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <Router>
-        <Sidebar>
-          <Routes>
-            <Route path="/" element={<ContactsPage/>} />
-            <Route path="/visuals" element={<ChartsAndMaps/>} />
-          </Routes>
-        </Sidebar>
-      </Router>
-    </QueryClientProvider>
+    <div className=" h-screen">
+      <QueryClientProvider client={queryClient}>
+        <Router>
+          <Sidebar>
+            <Routes>
+              <Route path="/" element={<ContactsPage />} />
+              <Route path="/visuals" element={<ChartsAndMaps />} />
+            </Routes>
+          </Sidebar>
+        </Router>
+      </QueryClientProvider>
+    </div>
   );
 }
 

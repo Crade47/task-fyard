@@ -7,6 +7,9 @@ module.exports = {
   ],
   theme: {
     transparent: "transparent",
+    fontFamily:{
+      inter:['"Inter"', 'sans-serif']
+    },
     current: "currentColor",
     extend: {
       colors: {

@@ -30,3 +30,8 @@ code {
 .recharts-cartesian-axis-tick-value{
   color:white
 }
+
+.leaflet-container {
+  height: 25rem;
+  z-index: 0;
+}
