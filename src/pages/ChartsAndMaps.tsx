@@ -7,18 +7,18 @@ import MapLeaflet from "../components/MapLeaflet";
 
 // React component for rendering COVID-19 cases data
 export default function ChartsAndMaps() {
-  // Fetch COVID-19 cases data using the useQuery hook
+  // Fetching COVID-19 cases data using the useQuery hook
   const { data: casesData, isLoading } = useQuery({
     queryKey: ["casesData"],
     queryFn: getAllCases,
   });
 
+  // Fetching COVID-19 cases by country data for map using the useQuery hook
+  // This data is later passed into the MapLeaflet component
   const { data: mapData, isLoading: isMapDataLoading } = useQuery({
     queryKey: ["mapData"],
     queryFn: getMapData,
   });
-
-  console.log(mapData);
 
   return (
     <div className="px-2 md:px-4">
@@ -51,6 +51,7 @@ export default function ChartsAndMaps() {
         )}
       </Card>
 
+      {/* ------------------------------MAP SECTION------------------------------ */}
       <Card className="mt-10 mb-10 p-4 bg-zinc-400/30 rounded-md">
         <Title className="p-2 font-semibold">COVID-19 Status By Country</Title>
         {isMapDataLoading ? (
@@ -62,7 +63,6 @@ export default function ChartsAndMaps() {
         ) : (
           <MapLeaflet
             mapData={mapData || []}
-            isMapDataLoading={isMapDataLoading}
           />
         )}
       </Card>

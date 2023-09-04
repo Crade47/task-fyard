@@ -7,12 +7,16 @@ import type {
 } from "../types/types";
 
 // Main api url is in the .env
+
+
+//Function for getting all cases for the graph data in the dashboard
 export const getAllCases = async (): Promise<CasesDataType[]> => {
   const result = await fetch(
     `${process.env.REACT_APP_DATA_API}/historical/all?lastdays=all`
   );
   const data: GraphDataType = await result.json();
   const cases: CasesDataType[] = [];
+  //Formatting data for easier and cleaner use in LineGraph component
   for (const [date, value] of Object.entries(data.cases)) {
     const year = moment(date, "MM/DD/YY").format("YYYY");
     cases.push({
@@ -24,6 +28,7 @@ export const getAllCases = async (): Promise<CasesDataType[]> => {
   return cases;
 };
 
+//Function for getting all map data by countries
 export const getMapData = async (): Promise<MapData[]> => {
   const result = await fetch(`${process.env.REACT_APP_DATA_API}/countries`);
   const mapData: MapDataApiResponse[] = await result.json();
@@ -39,7 +44,7 @@ export const getMapData = async (): Promise<MapData[]> => {
   return formattedMapData;
 };
 
-// Define a number formatter function using the Internationalization API
+// Formatter function using the Internationalization API
 export const numberFormatter = (number: number) => {
   // Create a number formatter instance for English with compact notation
   let formatter = Intl.NumberFormat("en", { notation: "compact" });
