@@ -30,8 +30,8 @@ export default function Sidebar({ children }: SidebarProps) {
           <FaBars />
         </div>
         <div className="grid grid-flow-col md:grid-flow-row items-center">
-          {menuItems.map((item) => (
-            <NavLink to={item.path}>
+          {menuItems.map((item,index) => (
+            <NavLink to={item.path} key={index}>
               {({ isActive, isPending }) => (
                 <div
                   className={
@@ -46,7 +46,7 @@ export default function Sidebar({ children }: SidebarProps) {
           ))}
         </div>
       </div>
-      <main>{children}</main>
+      <main className="w-full h-full ">{children}</main>
     </div>
   );
 }
