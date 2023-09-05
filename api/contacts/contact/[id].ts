@@ -27,7 +27,7 @@ export default async function getContact(
     }
     return
   }
-  if (req.method == "DELETE") {
+  if (req.method === "DELETE") {
     const { id } = req.query;
     const query = `DELETE FROM contacts WHERE id=?`;
     try {
