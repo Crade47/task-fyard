@@ -6,8 +6,8 @@ const config = {
   password: process.env.DATABASE_PASSWORD,
 };
 
-const conn = connect(config);
-export default async function all(req: VercelRequest, res: VercelResponse) {
+const conn = await connect(config);
+export default async function create(req: VercelRequest, res: VercelResponse) {
   const { first_name, last_name, phone_number } = req.body;
   if (req.method === "POST") {
     const query =
@@ -23,7 +23,7 @@ export default async function all(req: VercelRequest, res: VercelResponse) {
         res.status(409).json({ error: "could not create entry" });
         return;
       }
-      res.status(200).json({"message":"created successfully", "statement": result.statement});
+      res.status(200).json({"message":"created successfully"});
       return
     } catch (error: any) {
       res.status(500).json({ error: error.message });
