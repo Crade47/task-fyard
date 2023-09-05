@@ -1,5 +1,13 @@
 import { VercelRequest, VercelResponse } from "@vercel/node";
 import { connect } from "@planetscale/database";
+
+type ContactType = {
+  id: number,
+  first_name:string,
+  last_name:string,
+  phone_number:string
+}
+
 const config = {
   host: process.env.DATABASE_HOST,
   username: process.env.DATABASE_USERNAME,
@@ -8,11 +16,15 @@ const config = {
 
 const conn = await connect(config);
 export default async function create(req: VercelRequest, res: VercelResponse) {
-  const { first_name, last_name, phone_number } = req.body;
+  //Destructuring body for all the contact fields, id is automatically generated in the db
+  const { first_name, last_name, phone_number }: Partial<ContactType> = req.body;
   if (req.method === "POST") {
+    //SQL Query which we later bind the values to in conn.execute(..)
     const query =
       "INSERT INTO contacts (first_name, last_name, phone_number) VALUES(?,?,?)";
     try {
+
+    //Second argument is binding all the values to prevent SQL injections
       const result = await conn.execute(query, [
         first_name,
         last_name,

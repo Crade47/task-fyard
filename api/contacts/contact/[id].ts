@@ -6,14 +6,20 @@ const config = {
   password: process.env.DATABASE_PASSWORD,
 };
 
+type ContactType = {
+  id: number,
+  first_name:string,
+  last_name:string,
+  phone_number:string
+}
+
 const conn = connect(config);
 export default async function getContact(
   req: VercelRequest,
   res: VercelResponse
 ) {
+  const { id }:Partial<ContactType> = req.query;
   if (req.method === "GET") {
-    const { id } = req.query;
-
     const query = `SELECT * FROM contacts WHERE id= ?`;
     try {
       const result = await conn.execute(query, [id]);
@@ -28,7 +34,6 @@ export default async function getContact(
     return
   }
   if (req.method === "DELETE") {
-    const { id } = req.query;
     const query = `DELETE FROM contacts WHERE id=?`;
     try {
       const result = await conn.execute(query, [id]);
