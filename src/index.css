@@ -9,6 +9,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background: rgba(30, 30, 30, 255);
   color: #cecece;
+  -webkit-tap-highlight-color:  rgba(255, 255, 255, 0); 
 }
 
 /* Removing scroll bars from the main view */
@@ -49,4 +50,8 @@ code {
 .leaflet-container {
   height: 25rem;
   z-index: 0;
+}
+
+.no-highlight{
+  -webkit-tap-highlight-color:  rgba(255, 255, 255, 0); 
 }

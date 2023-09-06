@@ -42,3 +42,9 @@ export type MapData = {
     recovered: string; // A string representing recovered cases (note: consider using a number if needed)
 }
  
+export type ContactData = {
+    id: number,
+    first_name: string,
+    last_name?: string,
+    phone_number: string,
+}
