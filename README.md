@@ -1,46 +1,55 @@
-# Getting Started with Create React App
+## Overview
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is a repository for the task assigned from the company Frontyard. This project was bootstrapped from create-react-app. It uses Typescript to ensure type safety, tremor to display graphs, react-leaflet for displaying map-leaflets, React query for data fetching and caching, Redux toolkit for global state management and Planetscale for a MySQL database.
 
-## Available Scripts
 
-In the project directory, you can run:
+## Prerequisites
 
-### `npm start`
+Before you can fully utilize the CRUD operations on the "Contacts" page, you need to set up the Vercel CLI and run the development server using the `vercel dev` command. 
+There are many unfixed errors for the local development of serverless api routes for non next.js contexts like this project. I will recommend checking the crud operations through the deployed link. However if you still want to check the apis you can do the following:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+1. Install the Vercel CLI globally if you haven't already:
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+   ```bash
+   npm install -g vercel
+   ```
+2. Authenticate with your Vercel account:
 
-### `npm test`
+  ```bash
+  vercel login
+  ```
+3. Link local project to project created in the vercel dashboard:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+  ```bash
+  vercel link
+  ```
+4. To run the api locally:
 
-### `npm run build`
+  ```bash
+  vercel dev
+  ```
+Another note: The delete operation would not work locally due to some unpatched errors on vercel's side (it works fine after being deployed).
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Once deployed, the "Contacts" page's CRUD operations should work as expected on localhost:3000.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Running the app locally:
+Please Note that only the Maps and Charts page will be correctly displayed:
+1. Install the node modules:
+  ```bash
+  npm install
+  ```
+2. Run
+  ```bash
+  npm start
+  ```
+Runs the app in development mode.
+Open http://localhost:3000 to view it in your browser.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+The page will reload if you make edits, but please note that the "Contacts" page's CRUD operations won't work locally without setting up Vercel Serverless Functions.
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+3. Build
+ ```bash
+ npm run build
+```
+Builds the app for production to the build folder.
+It correctly bundles React in production mode and optimizes the build for the best performance. Your app will be ready for deployment.
