@@ -1,4 +1,4 @@
-import React from "react";
+import { useEffect } from "react";
 import { Card, Title, LineChart } from "@tremor/react";
 import { useQuery } from "@tanstack/react-query";
 import { getAllCases, getMapData, numberFormatter } from "../utils/utils";
@@ -19,6 +19,10 @@ export default function ChartsAndMaps() {
     queryKey: ["mapData"],
     queryFn: getMapData,
   });
+
+  useEffect(() => {
+    document.title = "Map and Chart";
+  }, []);
 
   return (
     <div className="px-2 md:px-4">
@@ -61,9 +65,7 @@ export default function ChartsAndMaps() {
             </div>
           </div>
         ) : (
-          <MapLeaflet
-            mapData={mapData || []}
-          />
+          <MapLeaflet mapData={mapData || []} />
         )}
       </Card>
     </div>
