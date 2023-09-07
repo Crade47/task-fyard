@@ -1,3 +1,7 @@
+## Overview
+
+This is a repository for the task assigned from the company Frontyard. This project was bootstrapped from create-react-app. It uses Typescript to ensure type safety, tremor to display graphs, react-leaflet for displaying map-leaflets, React query for data fetching and caching, Redux toolkit for global state management and Planetscale for a MySQL database.
+
 
 ## Prerequisites
 
