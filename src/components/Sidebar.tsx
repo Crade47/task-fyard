@@ -1,7 +1,6 @@
 import type { ReactNode } from "react";
 import { TiContacts } from "react-icons/ti/";
 import { BiMapAlt } from "react-icons/bi/";
-import { FaBars } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
 
 type SidebarProps = {

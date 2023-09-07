@@ -128,15 +128,18 @@ export default function ContactsPage() {
         <p></p>
       )}
       {/* Rendering the contact list   */}
-      {!contact.loading && contact.data.length > 0 ? (
+
+      {!contact.loading && contact.data.length === 0 && <p className="text-center">No Contacts Found. Add to get started!</p>}
+
+      {/* Rendering the contact list   */}
+      {!contact.loading && contact.data.length > 0 && (
         <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-8 mt-10">
           {contact.data.map((contact) => (
             <ContactCard key={contact.id} deleteContactMutation={deleteContactMutation} editContactMutation={editContactMutation} contactData={contact} />
           ))}
         </div>
-      ) : (
-        <p></p>
       )}
+
       {isAddModalOpen && (
         <Modal
           toggleModal={toggleAddModal}
