@@ -37,18 +37,19 @@ export default function Modal({
               <div className="flex justify-center mt-4">
                 {type !== "info" && (
                   <button
-                    disabled={contact.editPending}
+                    disabled={type === "edit" ? contact.editPending : contact.creationPending}
                     onClick={submitChanges}
                     className="active:opacity-50 active:text-gray-600 text-blue-700 no-highlight border-t border-r border-slate-200/10 py-2 w-full"
                   >
                     <div className="flex justify-center items-center">
-                      {(contact.editPending && type==="edit") && (
+                      {((contact.editPending && type==="edit") || (contact.creationPending && type==="add")) && (
                         <div className="text-xl flex border-lighterGray pr-2">
                           <div className="animate-spin">
                             <CgSpinner />
                           </div>
                         </div>
                       )}
+
                       {type === "add" ? "Add" : "Confirm"}
                     </div>
                   </button>

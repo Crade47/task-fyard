@@ -3,20 +3,33 @@ import { AiOutlineInfoCircle, AiOutlineEdit } from "react-icons/ai";
 import { MdOutlineDeleteOutline } from "react-icons/md";
 import Button from "./Button";
 import Modal from "./Modal";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import TextInput from "./TextInput";
 import type { UseMutateAsyncFunction } from "@tanstack/react-query";
+import { useAppSelector } from "../redux/app/hooks";
+import { validateForm } from "../utils/utils";
 
 type ContactCardProps = {
   contactData: ContactData;
-  editContactMutation: UseMutateAsyncFunction<void, unknown, ContactData, unknown>
+  editContactMutation: UseMutateAsyncFunction<
+    void,
+    unknown,
+    ContactData,
+    unknown
+  >;
 };
 
-export default function ContactCard({ contactData, editContactMutation }: ContactCardProps) {
+export default function ContactCard({
+  contactData,
+  editContactMutation,
+}: ContactCardProps) {
+  const contact = useAppSelector((state) => state.contact);
+
   const [openEdit, setOpenEdit] = useState(false);
   const [openInfo, setOpenInfo] = useState(false);
+  const [editError, setEditError] = useState(contact.editError);
   const [contactForm, setContactForm] = useState<ContactData>({
-    id:contactData.id,
+    id: contactData.id,
     first_name: contactData.first_name,
     last_name: contactData.last_name,
     phone_number: contactData.phone_number,
@@ -32,18 +45,31 @@ export default function ContactCard({ contactData, editContactMutation }: Contac
 
   const editModalToggler = () => {
     setContactForm({
-      id:contactData.id,
+      id: contactData.id,
       first_name: contactData.first_name,
       last_name: contactData.last_name,
       phone_number: contactData.phone_number,
     });
+    setEditError("")
     setOpenEdit((prev) => !prev);
   };
 
-  const handleEditSubmission = async () =>{
-    await editContactMutation(contactForm)
+  const handleEditSubmission = async () => {
+    const error = validateForm(contactForm);
+    setEditError("");
+    if(error.trim() !== ""){
+      setEditError(error)
+      return;
+    }
+    await editContactMutation(contactForm);
     setOpenEdit((prev) => !prev);
-  }
+  };
+
+  useEffect(() => {
+    if (contact.editError.trim() !== "") {
+      setEditError(contact.editError);
+    }
+  }, [contact]);
 
   return (
     <>
@@ -82,7 +108,11 @@ export default function ContactCard({ contactData, editContactMutation }: Contac
         </div>
       </div>
       {openEdit && (
-        <Modal submitChanges={handleEditSubmission} toggleModal={editModalToggler} type="edit">
+        <Modal
+          submitChanges={handleEditSubmission}
+          toggleModal={editModalToggler}
+          type="edit"
+        >
           <form action="">
             <div className="grid grid-cols-2 gap-2">
               <TextInput
@@ -106,6 +136,7 @@ export default function ContactCard({ contactData, editContactMutation }: Contac
               maxLength={10}
             />
           </form>
+          <p className="text-rose-700 text-sm text-center mt-2">{editError}</p>
         </Modal>
       )}
       {openInfo && (

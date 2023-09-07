@@ -4,19 +4,23 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 interface ContactState {
   deletePending: boolean;
   editPending: boolean;
+  creationPending: boolean;
   loading: boolean;
   data: ContactData[];
   error: string;
   editError:string; 
+  creationError:string; 
 }
 
 const initialState: ContactState = {
   deletePending: false,
   editPending: false,
+  creationPending: false,
   loading: false,
   data: [],
   error: "",
   editError: "",
+  creationError:"", 
 };
 
 export const fetchContacts = createAsyncThunk(
@@ -43,11 +47,31 @@ export const editContact = createAsyncThunk(
   }
 );
 
+
+export const addContact = createAsyncThunk(
+  "contact/editContact",
+  async (body: Omit<ContactData,"id">) => {
+    const reqOption: RequestInit = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    };
+    const response = await fetch(`/api/contacts/contact/create`, reqOption);
+    return response.json();
+  }
+);
+
+
+
 const contactSlice = createSlice({
   name: "contact",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
+
+
     //Fetch Contacts Cases
     builder.addCase(fetchContacts.pending, (state) => {
       state.loading = true;
@@ -62,6 +86,8 @@ const contactSlice = createSlice({
       state.data = [];
       state.error = action.payload as string;
     });
+
+
     //Edit Contact Cases
     builder.addCase(editContact.pending, (state) => {
       state.editPending = true;
@@ -72,6 +98,19 @@ const contactSlice = createSlice({
     builder.addCase(editContact.rejected, (state, action) => {
       state.editPending = false;
       state.editError = action.payload as string
+    });
+
+
+    //Contact creating Cases
+    builder.addCase(addContact.pending, (state) => {
+      state.creationPending = true;
+    });
+    builder.addCase(addContact.fulfilled, (state) => {
+      state.creationPending = false;
+    });
+    builder.addCase(addContact.rejected, (state, action) => {
+      state.creationPending = false;
+      state.creationError = action.payload as string
     });
   },
 });
