@@ -10,6 +10,7 @@ interface ContactState {
   error: string;
   editError:string; 
   creationError:string; 
+  deletionError:string; 
 }
 
 const initialState: ContactState = {
@@ -21,6 +22,7 @@ const initialState: ContactState = {
   error: "",
   editError: "",
   creationError:"", 
+  deletionError:"", 
 };
 
 export const fetchContacts = createAsyncThunk(
@@ -123,6 +125,18 @@ const contactSlice = createSlice({
     builder.addCase(addContact.rejected, (state, action) => {
       state.creationPending = false;
       state.creationError = action.payload as string
+    });
+
+    //Contact deletion Cases
+    builder.addCase(deleteContact.pending, (state) => {
+      state.deletePending= true;
+    });
+    builder.addCase(deleteContact.fulfilled, (state) => {
+      state.deletePending= false;
+    });
+    builder.addCase(deleteContact.rejected, (state, action) => {
+      state.deletePending= false;
+      state.deletionError= action.payload as string
     });
   },
 });

@@ -8,6 +8,7 @@ import TextInput from "./TextInput";
 import type { UseMutateAsyncFunction } from "@tanstack/react-query";
 import { useAppSelector } from "../redux/app/hooks";
 import { validateForm } from "../utils/utils";
+import { CgSpinner } from "react-icons/cg";
 
 type ContactCardProps = {
   contactData: ContactData;
@@ -17,17 +18,20 @@ type ContactCardProps = {
     ContactData,
     unknown
   >;
+  deleteContactMutation: UseMutateAsyncFunction<void, unknown, number, unknown>;
 };
 
 export default function ContactCard({
   contactData,
   editContactMutation,
+  deleteContactMutation,
 }: ContactCardProps) {
   const contact = useAppSelector((state) => state.contact);
 
   const [openEdit, setOpenEdit] = useState(false);
   const [openInfo, setOpenInfo] = useState(false);
   const [editError, setEditError] = useState(contact.editError);
+  const [isDeleting, setIsDeleting] = useState(false)
   const [contactForm, setContactForm] = useState<ContactData>({
     id: contactData.id,
     first_name: contactData.first_name,
@@ -50,20 +54,26 @@ export default function ContactCard({
       last_name: contactData.last_name,
       phone_number: contactData.phone_number,
     });
-    setEditError("")
+    setEditError("");
     setOpenEdit((prev) => !prev);
   };
 
   const handleEditSubmission = async () => {
     const error = validateForm(contactForm);
     setEditError("");
-    if(error.trim() !== ""){
-      setEditError(error)
+    if (error.trim() !== "") {
+      setEditError(error);
       return;
     }
     await editContactMutation(contactForm);
     setOpenEdit((prev) => !prev);
   };
+
+  const handleDeleteContact = async () => {
+    setIsDeleting(true)
+    await deleteContactMutation(contactData.id)
+    setIsDeleting(false)
+  }
 
   useEffect(() => {
     if (contact.editError.trim() !== "") {
@@ -100,9 +110,17 @@ export default function ContactCard({
                 </Button>
               </div>
               {/* Delete button */}
-              <Button>
-                <MdOutlineDeleteOutline />
-              </Button>
+              {isDeleting ? (
+                <div className="text-xl flex border-lighterGray ">
+                  <div className="animate-spin">
+                    <CgSpinner />
+                  </div>
+                </div>
+              ) : (
+                <Button onClick={handleDeleteContact}>
+                  <MdOutlineDeleteOutline />
+                </Button>
+              )}
             </div>
           </div>
         </div>

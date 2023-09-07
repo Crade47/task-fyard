@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../redux/app/hooks";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { addContact, editContact, fetchContacts } from "../redux/features/contactSlice";
+import { addContact, deleteContact, editContact, fetchContacts } from "../redux/features/contactSlice";
 import { CgSpinner } from "react-icons/cg";
 import { BsPersonAdd } from "react-icons/bs";
 import ContactCard from "../components/ContactCard";
@@ -68,6 +68,10 @@ export default function ContactsPage() {
     resetForm()
   }
 
+  //Function for adding the contact
+  const handleDeleteContact = async (id:number) =>{
+    await dispatch(deleteContact(id))
+  }
   //Setting the document title
   useEffect(() => {
     document.title = "Contacts";
@@ -89,6 +93,12 @@ export default function ContactsPage() {
   //Mutation hook for adding the contact and invalidatin the cache when done
   const { mutateAsync:addContactMutation } = useMutation({
     mutationFn: handleAddContact,
+    onSuccess:() => queryClient.invalidateQueries(["contactData"])
+  })
+
+  //Mutation hook for deleting the contact and invalidatin the cache when done
+  const { mutateAsync:deleteContactMutation} = useMutation({
+    mutationFn: handleDeleteContact,
     onSuccess:() => queryClient.invalidateQueries(["contactData"])
   })
 
@@ -121,7 +131,7 @@ export default function ContactsPage() {
       {!contact.loading && contact.data.length > 0 ? (
         <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-8 mt-10">
           {contact.data.map((contact) => (
-            <ContactCard key={contact.id} editContactMutation={editContactMutation} contactData={contact} />
+            <ContactCard key={contact.id} deleteContactMutation={deleteContactMutation} editContactMutation={editContactMutation} contactData={contact} />
           ))}
         </div>
       ) : (
