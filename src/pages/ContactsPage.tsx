@@ -106,7 +106,7 @@ export default function ContactsPage() {
     <div className="p-3">
       <button
         onClick={() => setIsAddModalOpen(true)}
-        className="flex hover:bg-[#353535] active:opacity-20 rounded-md justify-center  bg-neutral-400/50 shadow-gray-200/40 p-3 gap-2 items-center border border-gray-700/50 "
+        className="flex bg-[#353535] active:opacity-20 rounded-md justify-center  hover:bg-neutral-400/50 shadow-gray-200/40 p-3 gap-2 items-center border border-gray-700/50 "
       >
         <span className="text-2xl">
           <BsPersonAdd />
