@@ -49,7 +49,7 @@ export const editContact = createAsyncThunk(
 
 
 export const addContact = createAsyncThunk(
-  "contact/editContact",
+  "contact/addContact",
   async (body: Omit<ContactData,"id">) => {
     const reqOption: RequestInit = {
       method: "POST",
@@ -63,7 +63,19 @@ export const addContact = createAsyncThunk(
   }
 );
 
-
+export const deleteContact = createAsyncThunk(
+  "contact/deleteContact",
+  async (id:number) => {
+    const reqOption: RequestInit = {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    const response = await fetch(`/api/contacts/contact/${id}`, reqOption);
+    return response.json();
+  }
+);
 
 const contactSlice = createSlice({
   name: "contact",
