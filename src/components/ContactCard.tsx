@@ -5,15 +5,18 @@ import Button from "./Button";
 import Modal from "./Modal";
 import { useState } from "react";
 import TextInput from "./TextInput";
+import type { UseMutateAsyncFunction } from "@tanstack/react-query";
 
 type ContactCardProps = {
   contactData: ContactData;
+  editContactMutation: UseMutateAsyncFunction<void, unknown, ContactData, unknown>
 };
 
-export default function ContactCard({ contactData }: ContactCardProps) {
+export default function ContactCard({ contactData, editContactMutation }: ContactCardProps) {
   const [openEdit, setOpenEdit] = useState(false);
   const [openInfo, setOpenInfo] = useState(false);
-  const [contactForm, setContactForm] = useState<Omit<ContactData, "id">>({
+  const [contactForm, setContactForm] = useState<ContactData>({
+    id:contactData.id,
     first_name: contactData.first_name,
     last_name: contactData.last_name,
     phone_number: contactData.phone_number,
@@ -29,12 +32,18 @@ export default function ContactCard({ contactData }: ContactCardProps) {
 
   const editModalToggler = () => {
     setContactForm({
+      id:contactData.id,
       first_name: contactData.first_name,
       last_name: contactData.last_name,
       phone_number: contactData.phone_number,
     });
     setOpenEdit((prev) => !prev);
   };
+
+  const handleEditSubmission = async () =>{
+    await editContactMutation(contactForm)
+    setOpenEdit((prev) => !prev);
+  }
 
   return (
     <>
@@ -73,7 +82,7 @@ export default function ContactCard({ contactData }: ContactCardProps) {
         </div>
       </div>
       {openEdit && (
-        <Modal toggleModal={editModalToggler} type="edit">
+        <Modal submitChanges={handleEditSubmission} toggleModal={editModalToggler} type="edit">
           <form action="">
             <div className="grid grid-cols-2 gap-2">
               <TextInput

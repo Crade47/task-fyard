@@ -1,13 +1,22 @@
 import { ReactNode } from "react";
 import { GrClose } from "react-icons/gr";
+import { useAppSelector } from "../redux/app/hooks";
+import { CgSpinner } from "react-icons/cg";
 
 interface ModalProps {
   children: ReactNode;
   type: "edit" | "add" | "info";
   toggleModal: () => void;
+  submitChanges?: () => void;
 }
 
-export default function Modal({ children, toggleModal, type }: ModalProps) {
+export default function Modal({
+  children,
+  submitChanges,
+  toggleModal,
+  type,
+}: ModalProps) {
+  const contact = useAppSelector((state) => state.contact);
   return (
     <>
       <div>
@@ -27,8 +36,21 @@ export default function Modal({ children, toggleModal, type }: ModalProps) {
               {/* Footer */}
               <div className="flex justify-center mt-4">
                 {type !== "info" && (
-                  <button className="active:opacity-50 active:text-gray-600 text-blue-700 no-highlight border-t border-r border-slate-200/10 py-2 w-full">
-                    {type === "add" ? "Add" : "Confirm"}
+                  <button
+                    disabled={contact.editPending}
+                    onClick={submitChanges}
+                    className="active:opacity-50 active:text-gray-600 text-blue-700 no-highlight border-t border-r border-slate-200/10 py-2 w-full"
+                  >
+                    <div className="flex justify-center items-center">
+                      {(contact.editPending && type==="edit") && (
+                        <div className="text-xl flex border-lighterGray pr-2">
+                          <div className="animate-spin">
+                            <CgSpinner />
+                          </div>
+                        </div>
+                      )}
+                      {type === "add" ? "Add" : "Confirm"}
+                    </div>
                   </button>
                 )}
                 <button

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../redux/app/hooks";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { fetchContacts } from "../redux/features/contactSlice";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { editContact, fetchContacts } from "../redux/features/contactSlice";
 import { CgSpinner } from "react-icons/cg";
 import { BsPersonAdd } from "react-icons/bs";
 import ContactCard from "../components/ContactCard";
@@ -14,6 +14,8 @@ import { ContactData } from "../types/types";
 export default function ContactsPage() {
   const contact = useAppSelector((state) => state.contact);
   const dispatch = useAppDispatch();
+  const queryClient = useQueryClient()
+
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [newContactForm, setNewContactForm] = useState<Omit<ContactData, "id">>(
     {
@@ -30,6 +32,11 @@ export default function ContactsPage() {
     }));
   };
 
+
+  const handleEditContact = async (body:ContactData) =>{
+    await dispatch(editContact(body))
+  }
+
   useEffect(() => {
     document.title = "Contacts";
   }, []);
@@ -37,8 +44,13 @@ export default function ContactsPage() {
   const query = useQuery({
     queryKey: ["contactData"],
     queryFn: () => dispatch(fetchContacts()),
-    staleTime: Infinity,
+    refetchOnWindowFocus:false
   });
+
+  const { mutateAsync:editContactMutation,  } = useMutation({
+    mutationFn: handleEditContact,
+    onSuccess:() => queryClient.invalidateQueries(["contactData"])
+  })
 
   return (
     <div className="p-3">
@@ -69,7 +81,7 @@ export default function ContactsPage() {
       {!contact.loading && contact.data.length > 0 ? (
         <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-8 mt-10">
           {contact.data.map((contact) => (
-            <ContactCard key={contact.id} contactData={contact} />
+            <ContactCard key={contact.id} editContactMutation={editContactMutation} contactData={contact} />
           ))}
         </div>
       ) : (
